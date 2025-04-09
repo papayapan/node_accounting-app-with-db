@@ -39,15 +39,16 @@ const getExpensesFilterQuery = (categories, userId, from, to) => {
     filter.category = { [Op.in]: categories };
   }
 
-  if (from) {
-    filter.spentAt = { [Op.gte]: new Date(from) };
-  }
+  if (from || to) {
+    filter.spentAt = {};
 
-  if (to) {
-    filter.spentAt = {
-      ...filter.spentAt,
-      [Op.lte]: new Date(to),
-    };
+    if (from) {
+      filter.spentAt[Op.gte] = new Date(from);
+    }
+
+    if (to) {
+      filter.spentAt[Op.lte] = new Date(to);
+    }
   }
 
   return filter;

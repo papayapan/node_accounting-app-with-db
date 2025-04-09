@@ -37,7 +37,8 @@ const removeUser = async (req, res) => {
   if (!user) {
     throw getErrorWithStatus(404, 'User not found');
   }
-  await usersServices.removeUser(+userId);
+
+  await usersServices.removeUser(userId);
 
   res.sendStatus(204);
 };
