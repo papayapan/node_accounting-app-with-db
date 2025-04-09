@@ -40,14 +40,21 @@ const getExpensesFilterQuery = (categories, userId, from, to) => {
   }
 
   if (from || to) {
-    filter.spentAt = {};
+    const dateConditions = [];
 
     if (from) {
-      filter.spentAt[Op.gte] = new Date(from);
+      dateConditions.push({ spentAt: { [Op.gte]: new Date(from) } });
     }
 
     if (to) {
-      filter.spentAt[Op.lte] = new Date(to);
+      dateConditions.push({ spentAt: { [Op.lte]: new Date(to) } });
+    }
+
+    // Combine conditions with Op.and if both from and to are provided
+    if (dateConditions.length === 1) {
+      Object.assign(filter, dateConditions[0]);
+    } else {
+      filter[Op.and] = dateConditions;
     }
   }
 
